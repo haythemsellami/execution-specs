@@ -1,0 +1,21 @@
+[package]
+name = "monad-statetest"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+alloy-rlp = { version = "0.3.12", features = ["arrayvec", "derive"] }
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+hash-db = "0.15"
+monad-revm = { path = "../../../monad-revm/crates/monad-revm", features = ["std", "serde", "portable", "secp256k1", "blst", "optional_no_base_fee"] }
+plain_hasher = "0.2"
+revm = { version = "34.0.0", default-features = false, features = ["std", "portable", "secp256k1", "blst", "optional_no_base_fee", "tracer", "test-types"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+thiserror = "2.0"
+triehash = "0.8"
+
+[dev-dependencies]
+tempfile = "3.16"

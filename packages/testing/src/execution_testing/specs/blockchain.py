@@ -888,7 +888,7 @@ class BlockchainTest(BaseTest):
             != BlockchainEngineXFixture,
         )
         alloc: Alloc | LazyAlloc = pre
-        senders_authorities: dict[int, list[Address]] = {}
+        senders_authorities: Dict[int, List[Address]] = {}
         state_root = genesis.header.state_root
         env = environment_from_parent_header(genesis.header)
         head_hash = genesis.header.block_hash

@@ -10,6 +10,39 @@ The `execute remote` command requires to be pointed to an RPC endpoint of a clie
 uv run execute remote --fork=Prague --rpc-endpoint=https://rpc.endpoint.io
 ```
 
+## Local Monad Anvil Wrapper
+
+For the local Monad workflow in this repo, there is a wrapper script that:
+
+- starts `anvil --monad`
+- waits for the local RPC endpoint to be ready
+- runs `execute remote` against that node
+
+From the repo root:
+
+```bash
+scripts/run_monad_anvil_remote_tests.sh
+```
+
+That is equivalent to running:
+
+```bash
+UV_CACHE_DIR=/tmp/uv-cache uv run --no-sync execute remote \
+  --fork=MONAD_EIGHT \
+  --rpc-endpoint=http://127.0.0.1:8545 \
+  --rpc-seed-key=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 \
+  --chain-id=31337 \
+  --no-html \
+  tests -q
+```
+
+To narrow the test run, pass the normal pytest selection arguments after `--`:
+
+```bash
+scripts/run_monad_anvil_remote_tests.sh -- tests/osaka/eip7951_p256verify_precompiles
+scripts/run_monad_anvil_remote_tests.sh -- -m blockchain_test tests/monad_eight
+```
+
 Another requirement is that the command is provided with a seed account that has funds available in the network to deploy contracts and fund accounts. This can be done by setting the `--rpc-seed-key` flag:
 
 ```bash

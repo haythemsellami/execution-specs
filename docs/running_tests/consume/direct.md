@@ -29,6 +29,15 @@ uv run consume direct --bin=<evm-binary> [OPTIONS]
 - **Module scope**: Tests EVM, respectively block import, in isolation, not full client behavior.
 - **Interface dependency**: Requires client-specific test interfaces.
 
+## Monad Prototype
+
+There is now a local prototype direct consumer for Monad state fixtures backed
+by `monad-revm`.
+
+- Scope: `StateFixture` only
+- Fork support: pure `MONAD_EIGHT` fixtures only
+- Build and usage details: see [`monad_direct.md`](./monad_direct.md)
+
 ## Example Usage
 
 Only run state tests (by using a mark filter, `-m`) from a local `fixtures` folder with go-ethereum:
