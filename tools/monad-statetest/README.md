@@ -7,6 +7,19 @@ This lives inside `execution-specs` as a local integration tool so it can be
 developed next to the EEST Python consumer adapter while still exercising the
 real execution engine from the sibling `monad-revm` checkout.
 
+## Execution Client Under Test
+
+The execution client under test in this flow is
+[`monad-revm`](https://github.com/category-labs/monad-revm).
+
+The point of this tool is to validate `monad-revm` directly through
+`consume direct`.
+
+It is not using:
+
+- `alloy-monad-evm` as the direct execution target
+- Foundry / Anvil as the direct execution target
+
 ## What It Covers
 
 - `StateFixture` / `state_test` fixtures only
@@ -96,6 +109,12 @@ Blockchain fixtures matter too, but they need a second layer:
 
 That is better treated as a follow-on binary, not forced into the first state
 consumer.
+
+This is not mainly a consensus limitation.
+
+Even without consensus, `blockchain_test` support would require extra
+block-processing and block-import harness logic around `monad-revm`. For now,
+the scope is deliberately `StateFixture` only.
 
 ## File Map
 

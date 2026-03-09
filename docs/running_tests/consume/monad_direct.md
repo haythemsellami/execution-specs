@@ -24,6 +24,22 @@ Two pieces were added:
 2. A Python direct-consumer adapter that lets `execution-specs` call that
    binary through the existing `consume direct` flow.
 
+## Execution Client Under Test
+
+The execution client used by this `consume direct` path is
+[`monad-revm`](https://github.com/category-labs/monad-revm).
+
+That is the thing being validated here.
+
+This branch does not use:
+
+- `alloy-monad-evm` as the direct execution target
+- Foundry / Anvil as the direct execution target
+
+Those projects are important integration layers around Monad execution, but the
+direct consumer in this branch is intentionally aimed at the execution engine
+itself: `monad-revm`.
+
 ## Why The Binary Lives Here
 
 The binary uses the real `monad-revm` engine, but it currently lives inside
@@ -132,6 +148,13 @@ transaction executor. They need:
 
 That is a second phase, not something worth forcing into the first binary.
 
+This is not primarily about consensus work.
+
+`BlockchainFixture` would still require block-processing and block-import style
+logic around the execution engine, even if no consensus client is involved.
+`monad-revm` is the right engine to test, but this branch is using it as an
+execution engine for `StateFixture` first, not as a full block-test harness.
+
 ## Build Instructions
 
 From the `execution-specs` repo root:
@@ -175,7 +198,8 @@ Important notes:
 
 - Use `-m state_test` for now.
 - Non-Monad state fixtures are skipped by the Python adapter.
-- Blockchain fixtures are not consumed by this binary yet.
+- The current focus is `StateFixture` only.
+- `BlockchainFixture` is not consumed by this binary yet.
 
 ## Validation Semantics
 
