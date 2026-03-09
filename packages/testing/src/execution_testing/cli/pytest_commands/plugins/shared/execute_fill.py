@@ -177,6 +177,10 @@ def pytest_configure(config: pytest.Config) -> None:
     )
     config.addinivalue_line(
         "markers",
+        "valid_for_blob_forks: Marks a test as valid only for forks that support blobs",
+    )
+    config.addinivalue_line(
+        "markers",
         "mainnet: Specialty tests crafted for running on mainnet and sanity checking.",
     )
     config.addinivalue_line(

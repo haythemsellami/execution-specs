@@ -24,6 +24,8 @@ from .spec import Spec, ref_spec_4844
 REFERENCE_SPEC_GIT_PATH = ref_spec_4844.git_path
 REFERENCE_SPEC_VERSION = ref_spec_4844.version
 
+pytestmark = pytest.mark.valid_for_blob_forks()
+
 
 @pytest.fixture
 def destination_account() -> Address:

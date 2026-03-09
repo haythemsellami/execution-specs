@@ -1044,6 +1044,33 @@ class ValidForBPOForks(
         return resulting_set
 
 
+class ValidForBlobForks(
+    ValidityMarker, marker_name="valid_for_blob_forks", flag=True
+):
+    """
+    Marker to specify that a test is only valid for forks that support blobs.
+
+    ```python
+    import pytest
+
+    @pytest.mark.valid_for_blob_forks()
+    def test_blob_feature(state_test):
+        pass
+    ```
+    """
+
+    def _process_with_marker_args(self) -> Set[Fork]:
+        """Exclude blobless forks when the marker is present."""
+        if self.mark is None:
+            return set()
+        resulting_set: Set[Fork] = set()
+        for fork in ALL_FORKS:
+            if not fork.supports_blobs():
+                resulting_set.add(fork)
+                resulting_set |= transition_fork_to(fork)
+        return resulting_set
+
+
 def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     """Pytest hook used to dynamically generate test cases."""
     test_name = metafunc.function.__name__
