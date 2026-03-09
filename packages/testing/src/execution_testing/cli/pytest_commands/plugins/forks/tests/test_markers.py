@@ -178,6 +178,24 @@ def test_case(state_test):
         ),
         pytest.param(
             generate_test(
+                valid_from='"Cancun"',
+                valid_for_blob_forks="",
+            ),
+            ["--fork=Prague"],
+            {"passed": 1, "failed": 0, "skipped": 0, "errors": 0},
+            id="valid_for_blob_forks_prague",
+        ),
+        pytest.param(
+            generate_test(
+                valid_from='"Cancun"',
+                valid_for_blob_forks="",
+            ),
+            ["--fork=MONAD_EIGHT"],
+            {"passed": 0, "failed": 0, "skipped": 0, "errors": 0},
+            id="valid_for_blob_forks_monad_eight",
+        ),
+        pytest.param(
+            generate_test(
                 valid_at_transition_to='"BPO1"',
                 valid_for_bpo_forks="",
             ),

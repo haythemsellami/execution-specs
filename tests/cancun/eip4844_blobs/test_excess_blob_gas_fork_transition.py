@@ -30,6 +30,8 @@ from .spec import Spec, SpecHelpers, ref_spec_4844
 REFERENCE_SPEC_GIT_PATH = ref_spec_4844.git_path
 REFERENCE_SPEC_VERSION = ref_spec_4844.version
 
+pytestmark = pytest.mark.valid_for_blob_forks()
+
 # Timestamp of the fork
 FORK_TIMESTAMP = 15_000
 BASE_FEE_MAX_CHANGE_DENOMINATOR = 8
