@@ -57,6 +57,54 @@ The binary will be available at:
 ./tools/monad-statetest/target/release/monad-statetest
 ```
 
+## End-To-End From `execution-specs`
+
+The normal EEST flow for this binary is:
+
+```bash
+UV_CACHE_DIR=/tmp/uv-cache uv run --no-sync fill \
+  --fork MONAD_EIGHT \
+  --clean \
+  --no-html \
+  --single-fixture-per-file \
+  --output /tmp/monad-state-fixtures \
+  -m state_test \
+  tests \
+  -q
+
+UV_CACHE_DIR=/tmp/uv-cache uv run --no-sync consume direct \
+  --input /tmp/monad-state-fixtures \
+  -m state_test \
+  --bin ./tools/monad-statetest/target/release/monad-statetest \
+  -q
+```
+
+That is the current "run all supported tests on `monad-revm`" path:
+
+- search the repo under `tests/`
+- fill only `state_test` cases
+- fill specifically for `MONAD_EIGHT`
+- consume the resulting fixtures directly with `monad-revm`
+
+There is also a wrapper script at:
+
+```bash
+scripts/run_monad_revm_state_tests.sh
+```
+
+Default full run:
+
+```bash
+scripts/run_monad_revm_state_tests.sh
+```
+
+Subset examples:
+
+```bash
+scripts/run_monad_revm_state_tests.sh -- tests/osaka/eip7951_p256verify_precompiles
+scripts/run_monad_revm_state_tests.sh -- tests/prague/eip7702_set_code_tx/test_set_code_txs.py -k test_self_sponsored_set_code
+```
+
 ## Run It Manually
 
 ```bash

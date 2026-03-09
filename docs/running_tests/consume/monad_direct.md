@@ -169,6 +169,70 @@ The binary ends up at:
 ./tools/monad-statetest/target/release/monad-statetest
 ```
 
+## Manual End-To-End Flow
+
+This is the exact two-step flow used to run `monad-revm` against filled EEST
+fixtures:
+
+```bash
+UV_CACHE_DIR=/tmp/uv-cache uv run --no-sync fill \
+  --fork MONAD_EIGHT \
+  --clean \
+  --no-html \
+  --single-fixture-per-file \
+  --output /tmp/monad-state-fixtures \
+  -m state_test \
+  tests \
+  -q
+
+UV_CACHE_DIR=/tmp/uv-cache uv run --no-sync consume direct \
+  --input /tmp/monad-state-fixtures \
+  -m state_test \
+  --bin ./tools/monad-statetest/target/release/monad-statetest \
+  -q
+```
+
+Important clarification:
+
+- `tests` here does not mean "all repo tests are supported"
+- it means "search the repo test tree, fill only `state_test` cases, for
+  `MONAD_EIGHT`, then consume those filled fixtures with `monad-revm`"
+
+So this is the current closest thing to "run all supported tests on
+`monad-revm`".
+
+## One-Shot Script
+
+The repo now includes a wrapper script at
+`scripts/run_monad_revm_state_tests.sh`.
+
+From the repo root:
+
+```bash
+scripts/run_monad_revm_state_tests.sh
+```
+
+That does all of the following:
+
+- builds `tools/monad-statetest`
+- fills `MONAD_EIGHT` `state_test` fixtures
+- consumes those fixtures directly with `monad-revm`
+
+To narrow the run to a subset, pass the normal `fill` selection arguments after
+`--`:
+
+```bash
+scripts/run_monad_revm_state_tests.sh -- tests/osaka/eip7951_p256verify_precompiles
+scripts/run_monad_revm_state_tests.sh -- tests/prague/eip7702_set_code_tx/test_set_code_txs.py -k test_self_sponsored_set_code
+```
+
+Useful options:
+
+- `--debug`: use `target/debug/monad-statetest`
+- `--fixtures-dir <dir>`: keep fixtures in a specific directory
+- `--keep-fixtures`: do not delete the temp fixture directory
+- `--no-build`: skip `cargo build` if the binary already exists
+
 ## Manual Smoke Run
 
 If you already have a MONAD_EIGHT state fixture JSON:
